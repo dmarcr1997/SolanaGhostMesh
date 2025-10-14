@@ -1,26 +1,17 @@
 version: "3.7"
 services:
-  yolo-processor:
-    container_name: yolo-processor
-    image: ultralytics/ultralytics:latest-arm64
+  yolo-watcher:
+    container_name: yolo-watcher
+    build:
+      context: .
+      dockerfile: Dockerfile
     privileged: true
     ipc: host
     restart: unless-stopped
     volumes:
-      - ./yolo_input:/input
-    command: sh -c "while true; do sleep 1000; done" # Keep the container alive
+      - ./yolo_input:/yolo_input
+      - ./yolo_output:/yolo_output
 
-  yolo-watcher:
-    container_name: yolo-watcher
-    image: python:3.9-slim
-    restart: unless-stopped
-    volumes:
-      - ./yolo_input:/input
-      - ./watchdog_script.py:/app/watchdog_script.py
-      - /var/run/docker.sock:/var/run/docker.sock # Access the docker daemon from inside the container
-    depends_on:
-      - yolo-processor
     environment:
-      - YOLO_CONTAINER_NAME=yolo-processor
-      - YOLO_INPUT_DIR=/input
-    command: python /app/watchdog_script.py
+      - YOLO_INPUT_DIR=/yolo_input 
+      - YOLO_OUTPUT_DIR=/yolo_output

@@ -1,13 +1,14 @@
-FROM python:3.9-slim
+FROM ultralytics/ultralytics:latest-arm64
 
-# Install watchdog package
+# Install the watchdog package
 RUN pip install watchdog
 
-# Set working directory
+# Set the working directory
 WORKDIR /app
 
-# Copy application files
+# Copy the application files
 COPY watchdog_script.py .
 
-# Define command to run script
+# Define the command to run the script
 CMD ["python", "watchdog_script.py"]
+
