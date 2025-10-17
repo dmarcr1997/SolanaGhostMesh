@@ -13,5 +13,19 @@ services:
       - ./yolo_output:/yolo_output
 
     environment:
-      - YOLO_INPUT_DIR=/yolo_input 
+      - YOLO_INPUT_DIR=/yolo_input
       - YOLO_OUTPUT_DIR=/yolo_output
+
+  pinata-publisher:
+    build:
+      context: .
+      dockerfile: Dockerfile.uploader
+    restart: unless-stopped
+    environment:
+      JWT: ${JWT}
+      GATE: ${GATE}
+      PRED_DIR: /yolo_output
+      OUT_DIR: /logs
+    volumes:
+      - ./yolo_output:/yolo_output
+      - ./logs:/logs
