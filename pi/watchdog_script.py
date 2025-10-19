@@ -30,7 +30,7 @@ class MyHandler(FileSystemEventHandler):
                         source=file_path, 
                         device='cpu',
                         project=output_dir, 
-                        name='output_img.jpg', 
+                        name='output_imgs', 
 			save=True,
                         imgsz=320,
                         exist_ok=True

@@ -27,5 +27,5 @@ services:
       PRED_DIR: /yolo_output
       OUT_DIR: /logs
     volumes:
-      - ./yolo_output:/yolo_output
+      - ./yolo_output/output_imgs:/yolo_output
       - ./logs:/logs
