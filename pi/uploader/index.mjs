@@ -14,7 +14,7 @@ if (!process.env.JWT) throw new Error("Missing env JWT (Pinata JWT token)");
 
 const pinata = new PinataSDK({
   pinataJwt: process.env.JWT,
-  pinataGateway: process.env.GATEWAY,
+  pinataGateway: process.env.GATE,
 });
 
 function appendLog(row) {
@@ -33,25 +33,20 @@ function isFile(p) {
 
 function readFileSafe(p) {
   if (!isFile(p)) throw new Error(`Not a file: ${p}`);
-  // extra guard: ensure file size > 0 (avoid race on just-created file)
   const st = fs.statSync(p);
   if (st.size === 0) throw new Error(`Empty file (race?): ${p}`);
   return fs.readFileSync(p);
 }
 
 async function uploadOne(fp) {
-  // fp is a full path to .jpg or .json
   const { name, ext } = path.parse(fp);
   const extLc = ext.toLowerCase();
   if (extLc !== ".jpg" && extLc !== ".json") return;
 
-  // Ensure it’s a real file, not a dir
   const bytes = readFileSafe(fp);
 
-  // Pick a simple content type
   const contentType = extLc === ".jpg" ? "image/jpeg" : "application/json";
 
-  // Node 18+ has global File in most runtimes; if not, you can polyfill
   const blob = new Blob([bytes], { type: contentType });
   const file = new File([blob], path.basename(fp), { type: contentType });
 
@@ -62,7 +57,7 @@ async function uploadOne(fp) {
     timestamp: new Date().toISOString(),
     file: path.basename(fp),
     cid,
-    url: `${GATEWAY}/ipfs/${cid}`,
+    url: `${process.env.GATE}/ipfs/${cid}`,
   });
 }
 
