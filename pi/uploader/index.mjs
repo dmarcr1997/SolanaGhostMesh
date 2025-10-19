@@ -1,14 +1,25 @@
-import { PinataSDK } from "@pinata/sdk";
+import { PinataSDK } from "pinata";
 import fs from "fs";
+import path from "path";
 import { Blob } from "buffer";
 import chokidar from "chokidar";
 
 const PRED_DIR = process.env.PRED_DIR || "/yolo_output";
 const OUT_DIR = process.env.OUT_DIR || "/logs";
 
+// Load environment variables if .env file exists
+import dotenv from "dotenv";
+dotenv.config();
+
+if (!process.env.JWT) {
+  throw new Error(
+    "Missing required environment variable: JWT (Pinata JWT token)"
+  );
+}
+
 const pinata = new PinataSDK({
   pinataJwt: process.env.JWT,
-  pinataGateway: process.env.GATE,
+  pinataGateway: process.env.GATE || "https://gateway.pinata.cloud",
 });
 
 function appendLog(row) {
@@ -40,14 +51,18 @@ async function upload(imageName, filePath) {
 async function main() {
   if (fs.existsSync(PRED_DIR)) {
     for (const f of fs.readdirSync(PRED_DIR)) {
-      if (f.endsWith(".jpg")) await upload(path.parse(f).name, path);
+      if (f.endsWith(".jpg")) {
+        const filePath = path.join(PRED_DIR, f);
+        await upload(path.parse(f).name, filePath);
+      }
     }
   }
   fs.mkdirSync(PRED_DIR, { recursive: true });
   chokidar.watch(PRED_DIR, { ignoreInitial: true }).on("add", async (fp) => {
+    const { ext, name } = path.parse(fp);
     if (ext !== ".jpg" && ext !== ".json") return;
-    const stem = path.parse(fp).name;
-    setTimeout(() => upload(path, stem).catch(console.error), 250);
+    // Small delay to ensure file is fully written
+    setTimeout(() => upload(name, fp).catch(console.error), 250);
   });
 
   console.log("[Pinata] Publisher running. Watching:", PRED_DIR);
