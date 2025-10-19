@@ -7,7 +7,6 @@ import chokidar from "chokidar";
 const PRED_DIR = process.env.PRED_DIR || "/yolo_output";
 const OUT_DIR = process.env.OUT_DIR || "/logs";
 
-// Load environment variables if .env file exists
 import dotenv from "dotenv";
 dotenv.config();
 
