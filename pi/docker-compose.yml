@@ -29,3 +29,19 @@ services:
     volumes:
       - ./yolo_output/output_imgs:/yolo_output
       - ./logs:/logs
+  sol-submit:
+    build:
+      context: .
+      dockerfile: Dockerfile.sol
+    restart: unless-stopped
+    environment:
+      PROGRAM_ID: ${PROGRAM_ID}
+      RPC_URL: ${RPC_URL}
+      DEVICE_PUBKEY: ${DEVICE_PUBKEY}
+      LOG_FILE: /logs/log.json #MAP TO CORRECT VALUES ON CAMERAW
+      WALLET: /secrets/device.json #MAP TO CORRECT VALUES ON CAMERA
+    volumes:
+      - ./logs:/data
+      - ./secrets:/secrets:ro
+    depends_on:
+      - pinata-publisher

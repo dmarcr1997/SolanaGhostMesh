@@ -1,1 +1,6 @@
 .env
+**/secrets/**
+
+**/node_modules/*
+
+dist/
