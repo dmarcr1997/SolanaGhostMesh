@@ -2,5 +2,7 @@
 **/secrets/**
 
 **/node_modules/*
-
+yolo_input/*
+yolo_output/*
+logs/*
 dist/

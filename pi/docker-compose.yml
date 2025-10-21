@@ -35,13 +35,11 @@ services:
       dockerfile: Dockerfile.sol
     restart: unless-stopped
     environment:
-      PROGRAM_ID: ${PROGRAM_ID}
-      RPC_URL: ${RPC_URL}
-      DEVICE_PUBKEY: ${DEVICE_PUBKEY}
-      LOG_FILE: /logs/log.json #MAP TO CORRECT VALUES ON CAMERAW
-      WALLET: /secrets/device.json #MAP TO CORRECT VALUES ON CAMERA
+      API_URL: { $API_URL }
+      LOG_FILE: /data/log.json
+      WALLET: /secrets/pub.json
     volumes:
       - ./logs:/data
-      - ./secrets:/secrets:ro
+      - /home/mossy/sec:/secrets
     depends_on:
       - pinata-publisher

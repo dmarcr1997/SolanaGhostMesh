@@ -1,17 +1,12 @@
-FROM node:22-slim
+FROM python:3.11-slim
 
+RUN pip install watchdog requests
+
+# Set the working directory
 WORKDIR /app
-ENV NODE_ENV=production
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates && rm -rf /var/lib/apt/lists/*
+# Copy the application files
+COPY send_contract_update.py .
 
-COPY submitter/package.json ./
-RUN npm i --omit=dev
-
-COPY submitter/submitter.mjs ./
-
-ENV LOG_FILE=logs/logs.json
-ENV WALLET=/secrets/device.json
-
-CMD ["npm","start"]
+# Define the command to run the script
+CMD ["python", "send_contract_update.py"]
