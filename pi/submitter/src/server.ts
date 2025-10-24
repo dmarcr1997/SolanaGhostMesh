@@ -39,6 +39,15 @@ const port = 3000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+const ALLOW_ORIGIN = process.env.CORS_ORIGIN || "http://localhost:8080";
+
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", ALLOW_ORIGIN);
+  res.header("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  if (req.method === "OPTIONS") return res.sendStatus(204);
+  next();
+});
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -86,7 +95,7 @@ app.post(
   async (req: Request<{}, {}, SubmitAttestationRequest>, res: Response) => {
     try {
       const { device_pubkey_str, ipfs_cid, timestamp } = req.body;
-      const device_pubkey = new PublicKey(apiSigner.publicKey);
+      const device_pubkey = new PublicKey(device_pubkey_str);
       const [deviceAttestationPda] = getPda(device_pubkey);
       console.log(`Submitting attestation for device: ${device_pubkey_str}`);
       const ix = submitAttestation(
