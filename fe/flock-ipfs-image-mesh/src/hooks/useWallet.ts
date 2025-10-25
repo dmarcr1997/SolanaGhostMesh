@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { useApp } from "../state/AppState";
 import { getDevices } from "../services/api";
+import { generateMockIPFSHashes } from "../services/ipfs";
 
 export function useWallet() {
   const { state, dispatch } = useApp();
@@ -53,6 +54,7 @@ export function useWallet() {
         type: "SET_WALLET",
         payload: { connected: false, publicKey: null },
       });
+      dispatch({ type: "SET_HASHES", payload: generateMockIPFSHashes() });
     }
   }, [dispatch]);
 

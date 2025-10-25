@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 export const Modal: React.FC<{
   open: boolean;
@@ -6,6 +6,14 @@ export const Modal: React.FC<{
   hash?: string;
   onClose(): void;
 }> = ({ open, imgUrl, hash, onClose }) => {
+  useEffect(() => {
+    function handleEscape(event) {
+      if (event.key === "Escape") onClose();
+    }
+    window.addEventListener("keydown", handleEscape);
+    return () => window.removeEventListener("keydown", handleEscape);
+  }, []);
+
   return (
     <div className={`modal ${open ? "open" : ""}`} onClick={onClose}>
       <div className="modal__inner" onClick={(e) => e.stopPropagation()}>

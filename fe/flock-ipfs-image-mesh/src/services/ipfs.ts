@@ -4,7 +4,8 @@ export function generateMockIPFSHashes(count = CONFIG.DEVICES) {
   const hashes: string[] = [];
   const chars =
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  for (let i = 0; i < count; i++) {
+  const max = Math.floor(Math.random() * count);
+  for (let i = 0; i < max; i++) {
     let hash = "Qm";
     for (let j = 0; j < 44; j++)
       hash += chars.charAt(Math.floor(Math.random() * chars.length));

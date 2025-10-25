@@ -7,19 +7,19 @@ import { Modal } from "./components/Modal";
 import { LoadingOverlay } from "./components/LoadingOverlay";
 import { useApp } from "./state/AppState";
 import { useWallet } from "./hooks/useWallet";
-import { generateMockIPFSHashes } from "./services/ipfs";
+import { generateMockIPFSHashes, ipfsUrl } from "./services/ipfs";
 import DeviceScene from "./DeviceScene";
 
 const App: React.FC = () => {
   const { state, dispatch } = useApp();
   const { wallet, isWhitelisted, connect, disconnect } = useWallet();
 
-  // seed hashes once
   useEffect(() => {
     dispatch({ type: "SET_HASHES", payload: generateMockIPFSHashes() });
   }, [dispatch]);
 
-  const onShowImage = (hash: string, url: string) => {
+  const onShowImage = (hash: string) => {
+    const url = ipfsUrl(hash);
     dispatch({ type: "MODAL", payload: { open: true, hash, url } as any });
   };
 
@@ -36,7 +36,7 @@ const App: React.FC = () => {
           {isWhitelisted ? "✅ Whitelisted" : "❌ Not Whitelisted"}
         </div>
       </HUD>
-      <DeviceScene />
+      <DeviceScene showImg={onShowImage} />
       <LoadingOverlay open={state.ui.loading} />
       <Toast
         message={state.ui.toast?.message ?? ""}
