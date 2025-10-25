@@ -1,6 +1,6 @@
-import { CONFIG, BIRDS } from "../config";
+import { CONFIG } from "../config";
 
-export function generateMockIPFSHashes(count = BIRDS) {
+export function generateMockIPFSHashes(count = CONFIG.DEVICES) {
   const hashes: string[] = [];
   const chars =
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

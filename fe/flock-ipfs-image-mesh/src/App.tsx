@@ -8,6 +8,7 @@ import { LoadingOverlay } from "./components/LoadingOverlay";
 import { useApp } from "./state/AppState";
 import { useWallet } from "./hooks/useWallet";
 import { generateMockIPFSHashes } from "./services/ipfs";
+import DeviceScene from "./DeviceScene";
 
 const App: React.FC = () => {
   const { state, dispatch } = useApp();
@@ -35,7 +36,7 @@ const App: React.FC = () => {
           {isWhitelisted ? "✅ Whitelisted" : "❌ Not Whitelisted"}
         </div>
       </HUD>
-
+      <DeviceScene />
       <LoadingOverlay open={state.ui.loading} />
       <Toast
         message={state.ui.toast?.message ?? ""}
