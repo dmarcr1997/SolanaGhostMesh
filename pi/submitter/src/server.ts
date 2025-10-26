@@ -39,7 +39,7 @@ const port = 3000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-const ALLOW_ORIGIN = process.env.CORS_ORIGIN || "http://localhost:5500";
+const ALLOW_ORIGIN = process.env.CORS_ORIGIN || "http://localhost:8000";
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", ALLOW_ORIGIN);
