@@ -7,7 +7,7 @@ export const Modal: React.FC<{
   onClose(): void;
 }> = ({ open, imgUrl, hash, onClose }) => {
   useEffect(() => {
-    function handleEscape(event) {
+    function handleEscape(event: any) {
       if (event.key === "Escape") onClose();
     }
     window.addEventListener("keydown", handleEscape);

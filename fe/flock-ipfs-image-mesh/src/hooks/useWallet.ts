@@ -19,23 +19,26 @@ export function useWallet() {
       const publicKey = resp.publicKey.toString();
       dispatch({ type: "SET_WALLET", payload: { connected: true, publicKey } });
       const deviceResp = await getDevices();
-      dispatch({ type: "SET_DEVICES", payload: deviceResp.devices });
-      dispatch({ type: "SET_HASHES", payload: deviceResp.authorizedIpfsCids });
-
+      dispatch({ type: "SET_DEVICES", payload: deviceResp?.devices || [] });
       dispatch({
-        type: "TOAST",
-        payload:
-          deviceResp.devices.length > 0
-            ? {
-                message: "✅ Access granted! Click birds to view images.",
-                kind: "success",
-              }
-            : {
-                message: "⚠️ Not whitelisted. Images will scatter.",
-                kind: "warning",
-              },
+        type: "SET_HASHES",
+        payload: deviceResp?.authorizedIpfsCids || [],
       });
-    } catch (e) {
+      if (deviceResp)
+        dispatch({
+          type: "TOAST",
+          payload:
+            deviceResp.devices.length > 0
+              ? {
+                  message: "✅ Access granted! Click birds to view images.",
+                  kind: "success",
+                }
+              : {
+                  message: "⚠️ Not whitelisted. Images will scatter.",
+                  kind: "warning",
+                },
+        });
+    } catch (e: any) {
       dispatch({
         type: "TOAST",
         payload: {

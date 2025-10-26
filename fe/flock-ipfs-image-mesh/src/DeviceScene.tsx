@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Text } from "@react-three/drei";
-import * as THREE from "three";
 import { useApp } from "./state/AppState";
 
 type Props = {
@@ -11,11 +10,13 @@ type Props = {
 const InteractiveSphere = ({
   position,
   hash,
-  onPointerOver,
-  onPointerLeave,
   onClick,
+}: {
+  position: [number, number, number];
+  hash: string;
+  onClick: (hash: string) => void;
 }) => {
-  const meshRef = useRef();
+  const meshRef = useRef(null);
 
   const [hover, setHover] = useState(false);
 
@@ -24,13 +25,11 @@ const InteractiveSphere = ({
       ref={meshRef}
       position={position}
       onClick={() => onClick(hash)}
-      onPointerOver={(event) => {
+      onPointerOver={() => {
         setHover(true);
-        onPointerOver(event.object);
       }}
-      onPointerLeave={(event) => {
+      onPointerLeave={() => {
         setHover(false);
-        onPointerLeave(event.object);
       }}
     >
       <Text
@@ -61,17 +60,6 @@ function calculateGridDimensions(count: number) {
 const DeviceSceneR3F: React.FC<Props> = ({ showImg }) => {
   const { state } = useApp();
   const { imageHashes: hashes } = state;
-  const [hoveredObject, setHoveredObject] = useState<THREE.Object3D | null>(
-    null
-  );
-
-  const handlePointerOver = (object: THREE.Object3D) => {
-    setHoveredObject(object);
-    console.log(object);
-  };
-  const handlePointerLeave = (object: THREE.Object3D) => {
-    setHoveredObject(null);
-  };
 
   const { x, y, z } = calculateGridDimensions(hashes.length);
   const offsetX = (x - 1) / 2;
@@ -107,8 +95,6 @@ const DeviceSceneR3F: React.FC<Props> = ({ showImg }) => {
           position={sphere.position}
           hash={sphere.hash}
           onClick={showImg}
-          onPointerOver={handlePointerOver}
-          onPointerLeave={handlePointerLeave}
         />
       ))}
     </Canvas>
