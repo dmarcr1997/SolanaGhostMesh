@@ -1,8 +1,9 @@
 # SolanaGhostMesh
 
 **A Raspberry Pi–based AI camera that detects real-world events and securely publishes them to the Solana blockchain.**
-
-
+<br/>[Demo](https://youtu.be/eP_a-cmqfsk)
+<br/>[Pitch](https://youtu.be/7YC9A-6QJgQ)
+<br/>[UI](https://solana-ghost-mesh-4rxz.vercel.app)
 ## 🚀 Overview
 
 GhostMesh bridges the physical and digital worlds by turning low-power edge devices into verifiable sources of real-world truth.
